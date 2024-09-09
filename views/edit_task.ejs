@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box; margin-left: 15%; margin-right: 15%;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+    <% data.forEach(entry => { %>
+        <form action="/api/edit_task/<%= entry.id %>" method="post">
+            <h3>Edit Task</h3>
+            <label>Title</label>
+            <input type="text" id="tTitle" name="title" placeholder="<%= entry.title %>">
+
+            <label>Summary</label>
+            <input type="text" id="tSummary" name="summary" placeholder="<%= entry.summary %>">
+
+            <label>Effort</label>
+            <select id="tEffort" name="effort">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+            </select>
+
+            <input type="submit" value="Submit">
+        </form>
+        <form action="/">
+            <input type="submit" value="Go Back" />
+        </form>
+    <% }) %>
+</body>
+</html>
