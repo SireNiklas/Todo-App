@@ -1,57 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box; margin-left: 15%; margin-right: 15%;}
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="5">
+    <script src="https://kit.fontawesome.com/a96a640bf2.js" crossorigin="anonymous"></script>
 
-input[type=text], select, textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-top: 6px;
-  margin-bottom: 16px;
-  resize: vertical;
-}
-
-input[type=submit] {
-  background-color: #04AA6D;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-input[type=submit]:hover {
-  background-color: #45a049;
-}
-
-.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-</style>
-</head>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>QUESTER &bull; QUEST BOARD</title>
+  </head>
 <body>
-
-    <h1>TASKS</h1>
-
+  <!-- <div class="container d-flex justify-content-center"> -->
+    <!-- As a heading -->
+    <nav class="navbar sticky-top">
+      <div class="container-fluid justify-content-center">
+        <span class="navbar-brand h1">QUESTER &bull; QUEST BOARD</span>
+        <form class="form-inline" action="/api/new_task", method="get"><button type="submit" class="btn btn-success">Create Task</button></form>
+        <!-- <i class="fa-solid fa-coins form-inline">&nbsp;&nbsp;&nbsp;0</i> -->
+      </div>
+    </nav>
+    </br>
     <% data.forEach(entry => { %>
-    <h2><%= entry.title %></h2>
-    <p><%= entry.summary %></p>
-    <p><%= entry.id %></p>
-    <form action="/api/selected_task/<%= entry.id %>" method="delete"><input type="submit" value="Edit"></form>
-    <form action="/api/delete_task/<%= entry.id %>" method="delete"><input type="submit" value="Delete"></form>
+    <div class="container d-flex justify-content-center">
+      <div class="d-grid gap-2 d-md-block mb-3">
+        <div class="card text-white" style="width: 25rem;">
+          <% if(entry.effort == "low") { %>
+          <div class="card-body bg-info">
+            <h4 class="card-title"><%= entry.title %>  <%= data.value %></h4>
+            <p class="card-text"><%= entry.summary %></p>
+          </div>
+          <% } %>
+          <% if(entry.effort == "medium") { %>
+          <div class="card-body bg-warning">
+            <h4 class="card-title"><%= entry.title %></h4>
+            <p class="card-text"><%= entry.summary %></p>
+          </div>
+          <% } %>
+          <% if(entry.effort == "high") { %>
+          <div class="card-body bg-danger">
+            <h4 class="card-title"><%= entry.title %></h4>
+            <p class="card-text"><%= entry.summary %></p>
+          </div>
+          <% } %>
+          <div class="card-footer">
+            <div class="d-grid gap-2 d-md-flex">
+              <form action="/api/delete_task/<%= entry.id %>" method="get"><button type="submit" class="btn btn-success mr-1">Reward</button></form>
+              <form action="/api/delete_task/<%= entry.id %>" method="get"><button type="submit" class="btn btn-success justify-content-end mr-1">Points</button></form>
+              <form action="/api/selected_task/<%= entry.id %>" method="get"><button type="submit" class="btn btn-primary mr-1">Edit</button></form>
+              <form action="/api/delete_task/<%= entry.id %>" method="get"><button type="submit" class="btn btn-danger">Delete</button></form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <% }) %>
+  <!-- </div> -->
 
-    <form action="/api/new_task">
-        <input type="submit" value="Create New Task" />
-    </form>
-
-</body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>  </body>
 </html>

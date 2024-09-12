@@ -14,7 +14,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title text UNIQUE, 
             summary text UNIQUE,
-            points integer
+            effort text
         )`,
         (err) => {
             if (err) {
@@ -23,10 +23,10 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             }else{
                 console.log("Table created!")
                 // // Table just created, creating some rows
-                // var insert = 'INSERT INTO task (title, summary, points) VALUES (?,?,?)'
+                var insert = 'INSERT INTO task (title, summary, effort) VALUES (?,?,?)'
                 // db.run(insert, ["asdwdw Sasdwdwqawdasd tream","HeasdwdwadsStream",6])
                 // db.run(insert, ["asdasd","SCREEEM!",6])
-                // db.run(insert, ["Hello, World!","TEEEHEEEEEEEEEEEEE!",6])
+                db.run(insert, ["Hello, World!","TEEEHEEEEEEEEEEEEE!", "high"])
                 
             }
         });  

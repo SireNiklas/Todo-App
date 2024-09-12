@@ -30,15 +30,34 @@ app.get("/", (req, res, next) => {
         }
         res.render('index.ejs', {data: result});
       });
-
-
 });
+
+// Root endpoint
+app.get("/tv", (req, res, next) => {
+
+    var sql = "select * from task"
+    var params = []
+    db.all(sql, params, (err, result) => {
+        if (err) {
+            console.log("ERROR! Line 29")
+        }
+        res.render('tv.ejs', {data: result});
+      });
+});
+
 
 // New Task Enpoint
 app.get("/api/new_task", (req, res, next) => {
 
-    res.render('create_task.ejs', {});
-
+    var sql = "select * from task"
+    var params = [req.params.id]
+    db.all(sql, params, (err, result) => {
+        if (err) {
+          res.status(400).json({"error":err.message});
+          return;
+        }
+        res.render('create_task.ejs', {data: result});
+    });
 });
 
 // New Task Enpoint
@@ -53,8 +72,6 @@ var sql = "select * from task where id = ?"
         }
         res.render('edit_task.ejs', {data: result});
       });
-
-
 });
 
 // Insert here other API endpoints
@@ -92,10 +109,10 @@ app.post("/api/add_task/", (req, res, next) => {
     var data = {
         title: req.body.title,
         summary: req.body.summary,
-        points : req.body.effort
+        effort: req.body.effort,
     }
-    var sql ='INSERT INTO task (title, summary, points) VALUES (?,?,?)'
-    var params =[data.title, data.summary, data.points]
+    var sql ='INSERT INTO task (title, summary, effort) VALUES (?,?,?)'
+    var params =[data.title, data.summary, data.effort]
     db.run(sql, params, function (err, data) {
         if (err){
             res.status(400).json({"error": err.message})
@@ -108,17 +125,17 @@ app.post("/api/add_task/", (req, res, next) => {
 
 app.post("/api/edit_task/:id", (req, res, next) => {
     var data = {
-        title: req.body.title,
-        summary: req.body.summary,
-        points : req.body.points
+        title: req.body.title ? req.body.title : req.params.title,
+        summary: req.body.summary ? req.body.summary : req.params.summary,
+        effort : req.body.effort ? req.body.effort : req.params.effort,
     }
     db.run(
         `UPDATE task set 
            title = COALESCE(?,title), 
            summary = COALESCE(?,summary), 
-           points = COALESCE(?,points) 
+           effort = COALESCE(?,effort)
            WHERE id = ?`,
-        [data.title, data.summary, data.points, req.params.id],
+        [data.title, data.summary, data.effort, req.params.id],
         function (err, result) {
             if (err){
                 res.status(400).json({"error": res.message})
@@ -130,7 +147,6 @@ app.post("/api/edit_task/:id", (req, res, next) => {
 })
 
 app.get("/api/delete_task/:id", (req, res, next) => {
-    console.log("req params", req.params.id)
     var sql = "DELETE FROM task WHERE id = ?"
     var params = req.params.id
     db.run(sql, params, function (err, row) {
